@@ -1,4 +1,4 @@
-set(DESKTOP_TARGET                  ws407_desktop)
+set(DESKTOP_TARGET                  desktop)
 
 set(IO_MOCK_DIR     ${DESKTOP_TARGET_PATH}/io_mock)
 set(MOCKS_DIR       ${DESKTOP_TARGET_PATH}/mocks)

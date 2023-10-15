@@ -1,6 +1,28 @@
 include(${PROJECT_SOURCE_DIR}/config/common.cmake)
 include(${PROJECT_SOURCE_DIR}/config/mcu.cmake)
 
+# FreeRTOS build
+list(APPEND FREERTOS_SOURCES ${PORT_DIR}/GCC/ARM_CM4F/port.c)
+list(APPEND FREERTOS_SOURCES ${PORT_DIR}/MemMang/heap_4.c)
+
+add_library(freertos_mcu STATIC ${FREERTOS_SOURCES})
+
+target_include_directories(freertos_mcu PUBLIC
+    ${FREERTOS_DIR}/include
+    ${PORT_DIR}/GCC/ARM_CM4F
+    ${CMAKE_CURRENT_SOURCE_DIR}/Core/Inc
+)
+
+target_compile_definitions(freertos_mcu PRIVATE
+    projCOVERAGE_TEST=0
+)
+
+target_compile_options(freertos_mcu PRIVATE
+    -ggdb3
+    -O0
+    ${ARM_NONE_EABI_FLAGS}
+)
+
 # Add sources
 file(GLOB_RECURSE HAL_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/*.c
@@ -32,7 +54,7 @@ target_link_options(${STM32G474_TARGET} PRIVATE ${STM32G474_LINKER_OPTION})
 # Link libraries
 target_link_libraries(${STM32G474_TARGET}
     PRIVATE
-    freertos_kernel
+    freertos_mcu
     ${CMAKE_CURRENT_SOURCE_DIR}/Middlewares/ST/STM32_USBPD_Library/Core/lib/USBPDCORE_PD3_CONFIG_MINSNK_CM4_wc32.a
 )
 

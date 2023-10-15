@@ -1,11 +1,9 @@
 /**
  * @file application.c
- * @author Viacheslav (viacheslav@mcublog.ru)
+ * @author Aleksandr Ivashov (alexandration@icloud.com)
  * @brief
- * @version 0.1
- * @date 2022-10-27
  *
- * @copyright Viacheslav mcublog (c) 2022
+ * @copyright V
  *
  */
 #include <stdbool.h>
@@ -15,6 +13,7 @@
 #include "version.h"
 #include "utils/delay.h"
 #include "io/io_gpio.h"
+#include "freertos_utils.h"
 //>>---------------------- Log control
 #define LOG_MODULE_NAME app
 #if defined(NDEBUG)
@@ -29,19 +28,35 @@
 
 //<<----------------------
 
+TaskHandle_t taskTest;
+
+void TestTaskFunc(void *pvParameters)
+{
+    bool led = false;
+    for(;;)
+    {
+        vTaskDelay(1000);
+        io_gpio_led(led);
+        led ^= true;
+        LOG_INFO("working...");
+    }
+}
+
 /**
  * @brief
  *
  */
 void application(void)
 {
-    bool led = false;
     LOG_INFO("Version: %s", FW_VERSION);
-    while (1)
-    {
-        delay_ms(1000);
-        io_gpio_led(led);
-        led ^= true;
-        LOG_INFO("working...");
-    }
+    FRTOS_TaskCreateStatic(TestTaskFunc, "test", configMINIMAL_STACK_SIZE, NULL, 1, taskTest);
+	vTaskStartScheduler();
+    while(1) {}
+}
+
+void vApplicationStackOverflowHook(TaskHandle_t xTask, char* pcTaskName)
+{
+    char* ErrTask = pcTaskName;
+    (void)ErrTask;
+	while(1);
 }
