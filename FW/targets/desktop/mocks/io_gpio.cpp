@@ -1,15 +1,17 @@
 /**
- * @file io_gpio.c
- * @author Viacheslav (viacheslav@mcublog.ru)
+ * @file io_gpio.cpp
+ * @author Aleksandr Ivashov (alexandration@icloud.com)
  * @brief
- * @version 0.1
- * @date 2022-10-27
+ * @date 2023-12-17
  *
- * @copyright Viacheslav mcublog (c) 2022
+ * @copyright Copyright (c) 2023
  *
  */
 #include "io_gpio.h"
 #include "io_mock.h"
+
+#include <filesystem>
+
 //>>---------------------- Log control
 #define LOG_MODULE_NAME io_gpio
 #if defined(NDEBUG)
@@ -21,7 +23,7 @@
 //<<----------------------
 
 //>>---------------------- Local variables
-#define LED_GPIO_FILE_NAME "/tmp/io_led_gpio"
+static const auto LED_GPIO_FILE_NAME = std::filesystem::path("/tmp/io_led_gpio");
 //<<----------------------
 
 /**
@@ -31,9 +33,6 @@
  */
 void io_gpio_led(bool on)
 {
-    if (on)
-        LOG_INFO("gpio led: switch ON");
-    else
-        LOG_INFO("gpio led: switch OFF");
-    iomock_write_bool(LED_GPIO_FILE_NAME, on);
+	LOG_INFO("gpio led: switch %s", on ? "ON" : "OFF");
+	iomock_write_bool(LED_GPIO_FILE_NAME, on);
 }

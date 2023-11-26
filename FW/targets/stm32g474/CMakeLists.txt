@@ -1,15 +1,15 @@
-include(${PROJECT_SOURCE_DIR}/config/common.cmake)
-include(${PROJECT_SOURCE_DIR}/config/mcu.cmake)
+include(${PROJECT_SOURCE_DIR}/cmake/common.cmake)
+include(${PROJECT_SOURCE_DIR}/cmake/mcu.cmake)
 
 # FreeRTOS build
-list(APPEND FREERTOS_SOURCES ${PORT_DIR}/GCC/ARM_CM4F/port.c)
-list(APPEND FREERTOS_SOURCES ${PORT_DIR}/MemMang/heap_4.c)
+list(APPEND FREERTOS_SOURCES ${FREERTOS_DIR}/portable/GCC/ARM_CM4F/port.c)
+list(APPEND FREERTOS_SOURCES ${FREERTOS_DIR}/portable/MemMang/heap_4.c)
 
 add_library(freertos_mcu STATIC ${FREERTOS_SOURCES})
 
 target_include_directories(freertos_mcu PUBLIC
     ${FREERTOS_DIR}/include
-    ${PORT_DIR}/GCC/ARM_CM4F
+    ${FREERTOS_PORT_DIR}/GCC/ARM_CM4F
     ${CMAKE_CURRENT_SOURCE_DIR}/Core/Inc
 )
 
@@ -34,7 +34,10 @@ list(FILTER HAL_SOURCES EXCLUDE REGEX "FreeRTOS\/.+\.c$")
 list(APPEND HAL_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.c)
 list(REMOVE_ITEM HAL_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/Core/Src/app_freertos.c)
 
-file(GLOB_RECURSE APP_SOURCES ${APP_DIR}/*.c)
+file(GLOB_RECURSE APP_SOURCES
+    ${APP_DIR}/*.c
+    ${APP_DIR}/*.cpp
+)
 
 # Build lib
 add_executable(${STM32G474_TARGET} ${HAL_SOURCES} ${APP_SOURCES} ${RTT_SOURCES})

@@ -16,14 +16,27 @@ FetchContent_Populate(lvgl)
 FetchContent_Declare(
     lv_drivers
     GIT_REPOSITORY https://github.com/lvgl/lv_drivers.git
-    GIT_TAG        v6.1.1
+    GIT_TAG        release/v8.3
 )
 FetchContent_Populate(lv_drivers)
 
-set(FREERTOS_DIR ${freertos_SOURCE_DIR})
-set(PORT_DIR ${freertos_SOURCE_DIR}/portable)
 
+# region FreeRTOS common
+set(FREERTOS_DIR ${freertos_SOURCE_DIR})
 file(GLOB FREERTOS_SOURCES ${FREERTOS_DIR}/*.c)
+# endregion
+
+# region LVGL common
+set(LVGL_DIR ${lvgl_SOURCE_DIR})
+set(LVGL_INCLUDE_DIR ${lvgl_SOURCE_DIR}/src)
+
+file(GLOB_RECURSE LVGL_SOURCES ${LVGL_DIR}/src/*.c)
+# endregion
+
+# region LVGL drivers
+set(LVGL_DRIVERS_DIR ${lv_drivers_SOURCE_DIR})
+file(GLOB_RECURSE LVGL_DRIVERS_SOURCES ${LVGL_DRIVERS_DIR}/*.c)
+# endregion
 
 add_subdirectory(stm32g474)
 add_subdirectory(desktop)

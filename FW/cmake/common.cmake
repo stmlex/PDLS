@@ -4,17 +4,19 @@ set(APP_FW  app_fw)
 set(STM32G474_TARGET_PATH           ${PROJECT_SOURCE_DIR}/targets/stm32g474)
 set(DESKTOP_TARGET_PATH             ${PROJECT_SOURCE_DIR}/targets/desktop)
 
-set(APP_DIR     ${PROJECT_SOURCE_DIR}/app)
-set(DEBUG_DIR   ${APP_DIR}/debug)
-set(UTILS_DIR   ${APP_DIR}/utils)
-set(IO_DIR      ${APP_DIR}/io)
-set(LIBS_DIR    ${PROJECT_SOURCE_DIR}/libs)
+set(APP_DIR      ${PROJECT_SOURCE_DIR}/app)
+set(DEBUG_DIR    ${APP_DIR}/debug)
+set(UTILS_DIR    ${APP_DIR}/utils)
+set(IO_DIR       ${APP_DIR}/io)
+set(APP_LVGL_DIR ${APP_DIR}/lvgl_app)
+set(LIBS_DIR     ${PROJECT_SOURCE_DIR}/libs)
 
 set(APP_DIRS
     ${APP_DIR}
     ${DEBUG_DIR}
     ${UTILS_DIR}
     ${IO_DIR}
+    ${APP_LVGL_DIR}
 )
 
 set(COMMON_TYPES_TARGET common_types_test)

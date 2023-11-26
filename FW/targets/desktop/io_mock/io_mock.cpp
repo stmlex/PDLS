@@ -1,19 +1,20 @@
 /**
- * @file io_mock.c
- * @author Viacheslav (Viacheslav@mcublog.ru)
- * @brief IO mocking module
+ * @file io_mock.cpp
+ * @author Aleksandr Ivashov (alexandration@icloud.com)
+ * @brief
  * @version 0.1
- * @date 2022-09-26
+ * @date 2023-12-16
  *
- * @copyright Mcublog Copyright (c) 2022
+ * @copyright Copyright (c) 2023
  *
  */
-#include <errno.h>
-#include <stdio.h>
-#include <stdlib.h>
-
-#include "utils/delay.h"
 #include "io_mock.h"
+
+#include <iostream>
+#include <fstream>
+
+#include "freertos_utils.h"
+
 //>>---------------------- Log control
 #define LOG_MODULE_NAME iomock
 #if defined(NDEBUG)
@@ -37,17 +38,17 @@
  * @return true
  * @return false
  */
-bool iomock_read_bool(const char *filename)
+bool iomock_read_bool(const std::filesystem::path& filename)
 {
     bool result = false;
-    FILE *fp = fopen(filename, "r"); // read mode
-    if (fp == NULL)
+    std::fstream fs(filename, std::fstream::in);
+    if(!fs.is_open())
     {
         LOG_ERROR("Error while opening: %s", filename);
         return false;
     }
-    char ch = 0;
-    while ((ch = fgetc(fp)) != EOF)
+    char ch = fs.get();
+    while (ch != EOF)
     {
         if ('1' == ch)
         {
@@ -60,7 +61,7 @@ bool iomock_read_bool(const char *filename)
             break;
         }
     }
-    fclose(fp);
+    fs.close();
     return result;
 }
 
@@ -70,18 +71,17 @@ bool iomock_read_bool(const char *filename)
  * @param filename
  * @param value
  */
-void iomock_write_bool(const char *filename, bool value)
+void iomock_write_bool(const std::filesystem::path& filename, bool value)
 {
-    bool result = false;
-    FILE *fp = fopen(filename, "w");
-    if (fp == NULL)
+    std::ofstream fs{filename};
+    if (!fs.is_open())
     {
-        LOG_ERROR("Error while opening: %s", filename);
+        LOG_ERROR("Error while opening: %s", filename.c_str());
         return;
     }
     char ch = value ? '1' : '0';
-    fputc(ch, fp);
-    fclose(fp);
+    fs << ch;
+    fs.close();
     return;
 }
 
@@ -91,7 +91,7 @@ void iomock_write_bool(const char *filename, bool value)
  * @param vargp pointer to iomock_handlers_t struct
  * @return void*
  */
-void *iomock_edge_detecting(void *vargp)
+void *iomock_edge_detecting(void* vargp)
 {
     iomock_handlers_t *mock_handlers = (iomock_handlers_t *)(vargp);
     bool old_state, new_state;
@@ -101,7 +101,7 @@ void *iomock_edge_detecting(void *vargp)
         if (mock_handlers == NULL)
         {
             LOG_ERROR("mock_handlers is NULL");
-            delay_ms(IOMOCK_EDGE_DETECTING_ERROR_PERIOD_MS);
+            vTaskDelay(IOMOCK_EDGE_DETECTING_ERROR_PERIOD_MS);
             continue;
         }
         new_state = mock_handlers->state_reading();
@@ -116,39 +116,9 @@ void *iomock_edge_detecting(void *vargp)
             mock_handlers->irg_handler(IOMOCK_IRQ_FALLING);
         }
         old_state = new_state;
-        delay_ms(IOMOCK_EDGE_DETECTING_PERIOD_MS);
+        vTaskDelay(IOMOCK_EDGE_DETECTING_PERIOD_MS);
     }
     return NULL;
 }
 
-/**
- * @brief
- *
- * @param filename
- * @return true
- * @return false
- */
-bool iomock_file_is_exist(const char *filename)
-{
-    FILE *file;
-    bool res = false;
-    if ((file = fopen(filename, "r")) == NULL)
-    {
-        if (errno == ENOENT)
-        {
-            LOG_INFO("File: %s doesn't exist", filename);
-        }
-        else
-        {
-            // Check for other errors too, like EACCES and EISDIR
-            LOG_ERROR("Some other error occured");
-        }
-    }
-    else
-    {
-        fclose(file);
-        res = true;
-    }
-    return res;
-}
 //<<----------------------

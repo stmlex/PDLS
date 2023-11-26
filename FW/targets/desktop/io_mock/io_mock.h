@@ -2,7 +2,8 @@
 #ifndef IO_MOCK_H
 #define IO_MOCK_H
 
-#include <stdbool.h>
+#include <cstdbool>
+#include <filesystem>
 
 typedef enum
 {
@@ -19,19 +20,8 @@ typedef struct
     iomock_reading_t state_reading;
 } iomock_handlers_t;
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
-    bool iomock_read_bool(const char *filename);
-    void iomock_write_bool(const char *filename, bool value);
-    void *iomock_edge_detecting(void *vargp);
-
-    bool iomock_file_is_exist(const char *filename);
-
-#ifdef __cplusplus
-}
-#endif
+bool iomock_read_bool(const std::filesystem::path& filename);
+void iomock_write_bool(const std::filesystem::path& filename, bool value);
+void *iomock_edge_detecting(void *vargp);
 
 #endif // IO_MOCK_H
