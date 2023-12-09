@@ -1,11 +1,11 @@
 /**
  * @file main.c
- * @author Viacheslav (viacheslav@mcublog.ru)
+ * @author Aleksandr Ivashov (alexandration@icloud.com)
  * @brief
  * @version 0.1
  * @date 2022-10-23
  *
- * @copyright Viacheslav mcublog (c) 2022
+ * @copyright Copyright (c) 2022
  *
  */
 #include "application.h"

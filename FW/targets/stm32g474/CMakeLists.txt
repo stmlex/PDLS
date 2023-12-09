@@ -1,5 +1,5 @@
-include(${PROJECT_SOURCE_DIR}/config/common.cmake)
-include(${PROJECT_SOURCE_DIR}/config/mcu.cmake)
+include(${PROJECT_SOURCE_DIR}/cmake/common.cmake)
+include(${PROJECT_SOURCE_DIR}/cmake/mcu.cmake)
 
 # Add sources
 file(GLOB_RECURSE HAL_SOURCES

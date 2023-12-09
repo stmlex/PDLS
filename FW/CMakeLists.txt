@@ -3,7 +3,6 @@ cmake_minimum_required(VERSION 3.22)
 set_property(GLOBAL PROPERTY RULE_MESSAGES OFF)
 
 # Setup compiler settings
-set(CMAKE_TRY_COMPILE_TARGET_TYPE   "STATIC_LIBRARY")
 set(CMAKE_C_STANDARD                11)
 set(CMAKE_C_STANDARD_REQUIRED       ON)
 set(CMAKE_C_EXTENSIONS              ON)
@@ -14,12 +13,10 @@ if(NOT ${CMAKE_HOST_SYSTEM_NAME} MATCHES "Linux")
     set(CMAKE_SYSTEM_NAME           Generic) # workaround for Windows
 endif()
 
-set_property(GLOBAL PROPERTY RULE_MESSAGES OFF)
-
-include(config/common.cmake)
-include(config/mcu.cmake)
-include(config/desktop.cmake)
-include(config/utils.cmake)
+include(cmake/common.cmake)
+include(cmake/mcu.cmake)
+include(cmake/desktop.cmake)
+include(cmake/utils.cmake)
 include(FetchContent)
 # endregion
 
@@ -31,7 +28,7 @@ LOG_INFO("Build type:......." ${CMAKE_BUILD_TYPE})
 LOG_INFO("Desktop target:..." ${DESKTOP_TARGET})
 LOG_INFO("MCU target:......." ${STM32G474_TARGET})
 
-add_subdirectory(config)
+add_subdirectory(cmake)
 add_subdirectory(targets)
 
 # Added color compiler output
