@@ -9,9 +9,6 @@ set(CMAKE_C_EXTENSIONS              ON)
 set(CMAKE_CXX_STANDARD              20)
 set(CMAKE_CXX_STANDARD_REQUIRED     ON)
 set(CMAKE_CXX_EXTENSIONS            ON)
-if(NOT ${CMAKE_HOST_SYSTEM_NAME} MATCHES "Linux")
-    set(CMAKE_SYSTEM_NAME           Generic) # workaround for Windows
-endif()
 
 include(cmake/common.cmake)
 include(cmake/mcu.cmake)

@@ -8,7 +8,8 @@
  * @copyright Copyright (c) 2022
  *
  */
-#include "application.h"
+#include "tx_api.h"
+#include "gx_api.h"
 //>>---------------------- Log control
 #define LOG_MODULE_NAME main
 #if defined(NDEBUG)
@@ -20,8 +21,10 @@
 //<<----------------------
 
 //>>---------------------- Global
-int main(void)
+extern "C" int main(int argc, char* argv[])
 {
-    application();
+    /* Enter the ThreadX kernel. */
+    tx_kernel_enter( );
+    return 0;
 }
 //<<----------------------
