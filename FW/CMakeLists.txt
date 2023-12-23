@@ -7,6 +7,7 @@ set(CMAKE_C_EXTENSIONS              ON)
 set(CMAKE_CXX_STANDARD              20)
 set(CMAKE_CXX_STANDARD_REQUIRED     ON)
 set(CMAKE_CXX_EXTENSIONS            ON)
+set(CMAKE_COLOR_DIAGNOSTICS         ON)
 
 set_property(GLOBAL PROPERTY RULE_MESSAGES OFF)
 
@@ -27,13 +28,6 @@ LOG_INFO("MCU target:......." ${STM32G474_TARGET})
 
 add_subdirectory(cmake)
 add_subdirectory(targets)
-
-# Added color compiler output
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-    add_compile_options(-fdiagnostics-color=always)
-elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-    add_compile_options(-fcolor-diagnostics)
-endif()
 
 # region Tests
 message("******* [Unit test list] *******")

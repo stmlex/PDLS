@@ -1,4 +1,4 @@
-# Submodules
+# region Submodules
 FetchContent_Declare(
   freertos
   GIT_REPOSITORY https://github.com/FreeRTOS/FreeRTOS-Kernel.git
@@ -9,7 +9,7 @@ FetchContent_Populate(freertos)
 FetchContent_Declare(
     lvgl
     GIT_REPOSITORY https://github.com/lvgl/lvgl.git
-    GIT_TAG        v8.3.10
+    GIT_TAG        v8.3.11
 )
 FetchContent_Populate(lvgl)
 
@@ -19,7 +19,7 @@ FetchContent_Declare(
     GIT_TAG        release/v8.3
 )
 FetchContent_Populate(lv_drivers)
-
+# endregion
 
 # region FreeRTOS common
 set(FREERTOS_DIR ${freertos_SOURCE_DIR})
